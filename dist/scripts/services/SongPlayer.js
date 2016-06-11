@@ -28,12 +28,18 @@
 
         /**
          * @function playSong
-         * @desc
+         * @desc This one sets the current buzz object to play, which makes the actual audio in the browser
+         *  It also sets the state of playing to true;
          * @param {Object} song
          */
         var playSong = function(song) {
             currentBuzzObject.play();
-            song.playing = true;
+            SongPlayer.currentSong.playing = true;
+        };
+
+        var stopSong = function(song) {
+            currentBuzzObject.stop();
+            SongPlayer.currentSong.playing = null;
         };
 
         var getSongIndex = function(song) {
@@ -53,7 +59,8 @@
                 playSong(song);
             }else if (SongPlayer.currentSong === song) {
                 if(currentBuzzObject.isPaused()) {
-                    currentBuzzObject.play();
+                    // currentBuzzObject.play();
+                    playSong(song);
                 }
             }
         };
@@ -69,8 +76,20 @@
             currentSongIndex--;
 
             if (currentSongIndex < 0) {
-                currentBuzzObject.stop();
-                SongPlayer.currentSong.playing = null;
+                stopSong(song);
+            } else {
+                var song = currentAlbum.songs[currentSongIndex];
+                setSong(song);
+                playSong(song);
+            }
+        };
+
+        SongPlayer.next = function() {
+            var currentSongIndex = getSongIndex(SongPlayer.currentSong)
+            currentSongIndex++;
+
+            if (currentSongIndex > currentAlbum.songs.length - 1){
+                stopSong(song);
             } else {
                 var song = currentAlbum.songs[currentSongIndex];
                 setSong(song);
