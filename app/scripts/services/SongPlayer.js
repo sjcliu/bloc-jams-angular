@@ -23,12 +23,21 @@
                 formats: ['mp3'],
                 preload: true
             });
+            SongPlayer.currentBuzzObject = currentBuzzObject;
 
-            currentBuzzObject.bind('timeupdate', function() {
-                    $rootScope.$apply(function() {
-                        SongPlayer.currentTime = currentBuzzObject.getTime();
-                    });
-            });
+            currentBuzzObject.setVolume(50);
+
+            // currentBuzzObject.bind('timeupdate', function() {
+            //         $rootScope.$apply(function() {
+            //             SongPlayer.currentTime = currentBuzzObject.getTime();
+            //         });
+            // });
+            //
+            // currentBuzzObject.bind('volumechange', function() {
+            //     $rootScope.$apply(function() {
+            //         SongPlayer.volume = currentBuzzObject.getVolume();
+            //     });
+            // });
 
             SongPlayer.currentSong = song;
         };
@@ -59,6 +68,7 @@
         */
         SongPlayer.currentSong = null;
         SongPlayer.currentTime = null;
+        SongPlayer.volume = null;
 
         SongPlayer.play = function(song) {
             song = song || SongPlayer.currentSong;
@@ -111,10 +121,17 @@
             }
         };
 
+        SongPlayer.setVolume = function(volume) {
+            if(currentBuzzObject) {
+                currentBuzzObject.setVolume(volume);
+            }
+        };
+
+
         return SongPlayer;
     }
 
     angular
         .module('blocJams')
-        .factory('$rootScope', 'SongPlayer', SongPlayer);
+        .factory('SongPlayer', ['$rootScope', 'Fixtures', SongPlayer]);
 })();
