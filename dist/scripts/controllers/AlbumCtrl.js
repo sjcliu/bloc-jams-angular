@@ -6,10 +6,13 @@
 
         $scope.$watch(function(){return SongPlayer.currentBuzzObject}, function(newValue, oldValue){
             if(!newValue){return;}
-            
+
             newValue.bind('timeupdate', function() {
                 $scope.$apply(function() {
                     SongPlayer.currentTime = newValue.getTime();
+
+
+                    console.log(buzz.toTimer(newValue.getTime()));
                 });
             });
 
